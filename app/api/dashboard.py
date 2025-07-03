@@ -180,6 +180,7 @@ async def get_dashboard_data():
         "max_retry_num": settings.MAX_RETRY_NUM,
         # 添加空响应重试次数限制
         "max_empty_responses": settings.MAX_EMPTY_RESPONSES,
+        "base_url": settings.BASE_URL,
     }
 
 @dashboard_router.post("/reset-stats")
@@ -578,6 +579,12 @@ async def update_config(config_data: dict):
             except ValueError as e:
                 raise HTTPException(status_code=422, detail=f"参数类型错误：{str(e)}")
         
+        elif config_key == "base_url":
+            if not isinstance(config_value, str) or not config_value.startswith("http"):
+                raise HTTPException(status_code=422, detail="参数类型错误：应为http或https开头的URL字符串")
+            settings.BASE_URL = config_value
+            log('info', f"API基础URL已更新为：{config_value}")
+
         else:
             raise HTTPException(status_code=400, detail=f"不支持的配置项：{config_key}")
         save_settings()
