@@ -7,7 +7,8 @@ const dashboardStore = useDashboardStore()
 // Initialize localConfig with default structure
 const localConfig = reactive({
   maxRequestsPerMinute: 0,
-  maxRequestsPerDayPerIp: 0
+  maxRequestsPerDayPerIp: 0,
+  baseUrl: ''
 })
 
 const populatedFromStore = ref(false);
@@ -17,12 +18,14 @@ watch(
   () => ({
     storeMaxRequestsPerMinute: dashboardStore.config.maxRequestsPerMinute,
     storeMaxRequestsPerDayPerIp: dashboardStore.config.maxRequestsPerDayPerIp,
+    storeBaseUrl: dashboardStore.config.baseUrl,
     configIsActuallyLoaded: dashboardStore.isConfigLoaded,
   }),
   (newValues) => {
     if (newValues.configIsActuallyLoaded && !populatedFromStore.value) {
       localConfig.maxRequestsPerMinute = newValues.storeMaxRequestsPerMinute;
       localConfig.maxRequestsPerDayPerIp = newValues.storeMaxRequestsPerDayPerIp;
+      localConfig.baseUrl = newValues.storeBaseUrl;
       populatedFromStore.value = true;
     }
   },
@@ -96,6 +99,18 @@ defineExpose({
             class="config-input" 
             v-model.number="localConfig.maxRequestsPerDayPerIp" 
             min="0"
+          >
+        </div>
+      </div>
+
+      <div class="config-row">
+        <div class="config-group" style="flex-basis: 100%;">
+          <label class="config-label">自定义基础URL (Base URL)</label>
+          <input
+            type="text"
+            class="config-input"
+            v-model.trim="localConfig.baseUrl"
+            placeholder="例如: https://generativelanguage.googleapis.com"
           >
         </div>
       </div>
