@@ -33,7 +33,8 @@ export const useDashboardStore = defineStore('dashboard', () => {
     maxConcurrentRequests: 0,
     maxRetryNum: 0,
     searchPrompt: '',
-    maxEmptyResponses: 0
+    maxEmptyResponses: 0,
+    baseUrl: ''
   })
 
   const apiKeyStats = ref([])
@@ -129,7 +130,8 @@ export const useDashboardStore = defineStore('dashboard', () => {
       vertexExpressApiKey: data.vertex_express_api_key || false,
       googleCredentialsJson: data.google_credentials_json || false,
       maxRetryNum: data.max_retry_num || 0,
-      maxEmptyResponses: data.max_empty_responses || 0
+      maxEmptyResponses: data.max_empty_responses || 0,
+      baseUrl: data.base_url || ''
     }
 
     // 更新API密钥统计
